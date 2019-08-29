@@ -1,0 +1,5 @@
+---
+- hosts: nomad
+  roles:
+    - docker
+    - centos_common
