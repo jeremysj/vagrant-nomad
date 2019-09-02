@@ -1,14 +1,29 @@
 ---
 - name: Install docker
   gather_facts: No
-  hosts: all
+  hosts: default
 
   tasks:
+    - name: Remove docker if installed from CentOS repo
+      yum:
+        name: "{{ item }}"
+        state: removed
+        with_items:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+
     - name: Install docker software requirements
       become: true
       yum:
+        name: "{{ item }}"
         state: latest
-        name:
+        with_items:
           - yum-utils
           - device-mapper-persistent-data
           - lvm2
