@@ -14,8 +14,7 @@
   yum: name=* state=latest
 
 - name: Check for reboot hint
-  shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print$1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no';
-  ignore errors: true
+  shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print $1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
   register: reboot_hint
 
 
@@ -23,8 +22,7 @@
   command: shutdown -r now "Reboot required for updated kernel"
   async: 0
   poll: 0
-  sudo: true
-  ignore_errors: true
+  become: yes
   when: reboot_hint.stdout.find("reboot") != -1
   register: rebooting
 
